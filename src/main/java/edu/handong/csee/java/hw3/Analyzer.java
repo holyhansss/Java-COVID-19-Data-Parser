@@ -5,6 +5,7 @@ public class Analyzer {
 	private int numberOfCountries;
 	private int sameCountrycount=0;
 	private int totalPatient=0;
+	private int patients_Of_A_Country;
 	private int dateInNum;
 	private int dateInNum2;
 	private int patients_From_A_Specified_Date;
@@ -22,13 +23,18 @@ public class Analyzer {
 			dataIn2DArray[i] = data[i].split(",");
 			if(data[i].charAt(0) == '"') {
 				dataIn2DArray[i][0] = dataIn2DArray[i][0].concat(dataIn2DArray[i][1]);
-				
+				dataIn2DArray[i][0] = dataIn2DArray[i][0].substring(1,dataIn2DArray[i][0].length()-1);
 				for(int j=1;j<dataIn2DArray[i].length-1;j++) {
 				dataIn2DArray[i][j] = dataIn2DArray[i][j+1];
 				}
-
 			}
-			//korea too
+			else if(dataIn2DArray[i][1].charAt(0) == '"') {
+				dataIn2DArray[i][1] = dataIn2DArray[i][1].concat(dataIn2DArray[i][2]);
+				dataIn2DArray[i][1] = dataIn2DArray[i][1].substring(1,dataIn2DArray[i][1].length()-1);
+				for(int j=2;j<dataIn2DArray[i].length-1;j++) {
+				dataIn2DArray[i][j] = dataIn2DArray[i][j+1];
+				}
+			}
 			System.out.println(dataIn2DArray[i].length + " " + i + dataIn2DArray[i][1]);
 		}
 	}
@@ -36,20 +42,20 @@ public class Analyzer {
 
 
 	public int getNumberOfCountries(){ 
-		for(int i=0;i<data.length;i++) {
-			for(int j=0;j<data.length;j++) {
+		for(int i=1;i<data.length;i++) {
+			numberOfCountries++;
+			for(int j=1;j<i;j++) {
+				
 				if(dataIn2DArray[i][1].equalsIgnoreCase(dataIn2DArray[j][1])&&i!=j) {
 					sameCountrycount++;
 					break;
 				}
 			}
-			if(sameCountrycount==0) {
-				numberOfCountries++;
+			if(sameCountrycount!=0) {
+				numberOfCountries--;
 			}
 			sameCountrycount = 0;
 		}
-		
-
 		
 		return numberOfCountries;
 	}
@@ -63,7 +69,17 @@ public class Analyzer {
 		
 		return totalPatient;
 	}
-	//getNumberOfPatientsOfACountry("Korea, South")
+	public int getNumberOfPatientsOfACountry(String country) {
+		
+		for(int i=1;i<data.length;i++) {
+			System.out.println(i);
+			if(country.equalsIgnoreCase(dataIn2DArray[i][1])) {
+				patients_Of_A_Country = patients_Of_A_Country + Integer.parseInt(dataIn2DArray[i][1]);
+			}
+		}
+		
+		return patients_Of_A_Country;
+	}
 	public int getNumberOfPatientsFromASpecifiedDate(String date) {
 		dateInNum = 0;
 		dateInNum+=4;
