@@ -22,6 +22,7 @@ public class Analyzer {
 		for(int i=0;i<data.length;i++) {
 			dataIn2DArray[i] = data[i].split(",");
 			if(data[i].charAt(0) == '"') {
+				dataIn2DArray[i][0] = dataIn2DArray[i][0] + ",";
 				dataIn2DArray[i][0] = dataIn2DArray[i][0].concat(dataIn2DArray[i][1]);
 				dataIn2DArray[i][0] = dataIn2DArray[i][0].substring(1,dataIn2DArray[i][0].length()-1);
 				for(int j=1;j<dataIn2DArray[i].length-1;j++) {
@@ -29,13 +30,14 @@ public class Analyzer {
 				}
 			}
 			else if(dataIn2DArray[i][1].charAt(0) == '"') {
+				dataIn2DArray[i][1] = dataIn2DArray[i][1] + ",";
 				dataIn2DArray[i][1] = dataIn2DArray[i][1].concat(dataIn2DArray[i][2]);
 				dataIn2DArray[i][1] = dataIn2DArray[i][1].substring(1,dataIn2DArray[i][1].length()-1);
 				for(int j=2;j<dataIn2DArray[i].length-1;j++) {
 				dataIn2DArray[i][j] = dataIn2DArray[i][j+1];
 				}
 			}
-			System.out.println(dataIn2DArray[i].length + " " + i + dataIn2DArray[i][1]);
+			//System.out.println(dataIn2DArray[i].length + " " + i + dataIn2DArray[i][1]);
 		}
 	}
 
@@ -72,26 +74,18 @@ public class Analyzer {
 	public int getNumberOfPatientsOfACountry(String country) {
 		
 		for(int i=1;i<data.length;i++) {
-			System.out.println(i);
 			if(country.equalsIgnoreCase(dataIn2DArray[i][1])) {
-				patients_Of_A_Country = patients_Of_A_Country + Integer.parseInt(dataIn2DArray[i][1]);
+				patients_Of_A_Country = patients_Of_A_Country + Integer.parseInt(dataIn2DArray[i][dataIn2DArray[0].length-1]);
 			}
 		}
 		
 		return patients_Of_A_Country;
 	}
 	public int getNumberOfPatientsFromASpecifiedDate(String date) {
-		dateInNum = 0;
-		dateInNum+=4;
-		for(int i=4;i<dataIn2DArray[0].length-1;i++) {
-			if(dataIn2DArray[0][i].equalsIgnoreCase(date)) {
-				break;
-			}
-			dateInNum++;
-		}
+		dateInNum = Util.findDate(date,dataIn2DArray);
 		
 		for(int j=1;j<data.length;j++) {
-			patients_From_A_Specified_Date = patients_From_A_Specified_Date + Integer.parseInt(dataIn2DArray[j][dataIn2DArray[j].length-1]) - Integer.parseInt(dataIn2DArray[j][dateInNum]);
+			patients_From_A_Specified_Date = patients_From_A_Specified_Date + Integer.parseInt(dataIn2DArray[j][dataIn2DArray[j].length-1]) - Integer.parseInt(dataIn2DArray[j][dateInNum-1]);
 
 		}
 		
@@ -99,14 +93,8 @@ public class Analyzer {
 		return patients_From_A_Specified_Date;
 	}
 	public int getNumberOfPatientsBeforeASpecifiedDate(String date) {
-		dateInNum=0;
-		dateInNum+=4;
-		for(int i=4;i<dataIn2DArray[0].length-1;i++) {
-			if(dataIn2DArray[0][i].equalsIgnoreCase(date)) break;
-			
-			dateInNum++;
-		}
-		
+		dateInNum = Util.findDate(date,dataIn2DArray);
+
 		for(int i=1;i<data.length;i++) {
 			patients_Before_A_Specified_Date = patients_Before_A_Specified_Date + Integer.parseInt(dataIn2DArray[i][dateInNum-1]);
 		}
@@ -115,23 +103,11 @@ public class Analyzer {
 		
 	}
 	public int getNumberOfPatientsBetweenTwoDates(String date1,String date2){
-		dateInNum=0;
-		dateInNum+=4;
-		for(int i=4;i<dataIn2DArray[0].length-1;i++) {
-			if(dataIn2DArray[0][i].equalsIgnoreCase(date1)) break;
-			
-			dateInNum++;
-		}
-		
-		dateInNum2=0;
-		dateInNum2+=4;
-		for(int i=4;i<dataIn2DArray[0].length-1;i++) {
-			if(dataIn2DArray[0][i].equalsIgnoreCase(date2)) break;
-			dateInNum2++;
-		}
+		dateInNum = Util.findDate(date1,dataIn2DArray);
+		dateInNum2 = Util.findDate(date2,dataIn2DArray);
 		
 		for(int i=1;i<data.length;i++) {
-			patients_Between_Two_Dates = patients_Between_Two_Dates + Integer.parseInt(dataIn2DArray[i][dateInNum2]) - Integer.parseInt(dataIn2DArray[i][dateInNum]);
+			patients_Between_Two_Dates = patients_Between_Two_Dates + Integer.parseInt(dataIn2DArray[i][dateInNum2]) - Integer.parseInt(dataIn2DArray[i][dateInNum-1]);
 		}
 		
 		return patients_Between_Two_Dates;
