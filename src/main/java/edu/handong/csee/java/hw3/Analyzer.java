@@ -37,7 +37,6 @@ public class Analyzer {
 				dataIn2DArray[i][j] = dataIn2DArray[i][j+1];
 				}
 			}
-			//System.out.println(dataIn2DArray[i].length + " " + i + dataIn2DArray[i][1]);
 		}
 	}
 
