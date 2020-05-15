@@ -18,7 +18,7 @@ public class Analyzer {
 		TwoDsetter(this.data);
 	}
 	
-	public void TwoDsetter(String[] data) {
+	private void TwoDsetter(String[] data) {
 		for(int i=0;i<data.length;i++) {
 			dataIn2DArray[i] = data[i].split(",");
 			if(data[i].charAt(0) == '"') {
